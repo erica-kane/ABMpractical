@@ -2,6 +2,12 @@ import random
 import operator
 import matplotlib.pyplot
 
+def distance_between(agents_row_a, agents_row_b):
+    diff_y = (agents_row_a[0] - agents_row_b[0])
+    diff_x = (agents_row_a[1] - agents_row_b[1])
+    distance = (diff_y**2 + diff_x**2)**0.5
+    return distance
+
 # Creating a list for agents and variables
 agents = []
 num_of_agents = 10
@@ -12,6 +18,7 @@ for i in range(num_of_agents):
     agents.append([random.randint(0,100),random.randint(0,100)])
 print(agents)
 
+# Randomly moving our 10 agents 100 times 
 for _ in range(num_of_it):
     for i in range(num_of_agents):
         if random.random() < 0.5:
@@ -24,15 +31,14 @@ for _ in range(num_of_it):
             agents[i][1] = (agents[i][1] - 1) % 100
 print(agents)
 
+# Answer = pythaian distance between agents
+distance_between(agents[0], agents[1])
 
-# # Answer = pythaian distance between y0,x0 and y1,x1
-# answer = (((agents[0][0] - agents[1][0])**2) + \
-#     ((agents[0][1] - agents[1][1])**2))**0.5
-# print(answer)
-
-# # Which agent is furthest east? (highest x)
-# print(max(agents))
-# print(max(agents, key=operator.itemgetter(1)))
+# for loop for every agent 
+for first_agent in agents:
+    for second_agent in agents:
+        distance = distance_between(first_agent, second_agent)
+        print(first_agent, second_agent, distance)
 
 # Plot agent locations 
 matplotlib.pyplot.ylim(0, 99)
