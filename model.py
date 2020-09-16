@@ -58,7 +58,6 @@ print(max(agents, key=operator.itemgetter(1)))
 # Plot agent locations 
 matplotlib.pyplot.ylim(0, 99)
 matplotlib.pyplot.xlim(0, 99)
-matplotlib.pyplot.scatter(agents[0][1],agents[0][0])
+matplotlib.pyplot.scatter(agents[0][1],agents[0][0], color='red')
 matplotlib.pyplot.scatter(agents[1][1],agents[1][0])
-matplotlib.pyplot.scatter(agents[1][1], agents[1][0], color='red')
 matplotlib.pyplot.show()
