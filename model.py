@@ -2,64 +2,43 @@ import random
 import operator
 import matplotlib.pyplot
 
-# Creating a list for agents 
+# Creating a list for agents and variables
 agents = []
+num_of_agents = 10
+num_of_it = 100
 
-# Set y0 and x0 to a random value
-#y0 = random.randint(0,99)
-#x0 = random.randint(0,99)
-#print(y0, x0)
-agents.append([random.randint(0,99),random.randint(0,99)])
+# Creating co-ordinates for the amount of agents we set (10)
+for i in range(num_of_agents):
+    agents.append([random.randint(0,100),random.randint(0,100)])
 print(agents)
 
-# Move y0 randomly
-if random.random() < 0.5:
-    agents[0][0] = agents[0][0] + 1
-else:
-    agents[0][0] = agents[0][0] - 1
-
-# Move x0 randomly
-if random.random() < 0.5:
-    agents[0][1] = agents[0][1] + 1
-else:
-    agents[0][1] = agents[0][1] - 1
-print(agents[0][0], agents[0][1])
-
-# Set y1 and x1 to a random value 
-#y1 = random.randint(0,99)
-#x1 = random.randint(0,99)
-#print(y1, x1)
-agents.append([random.randint(0,99),random.randint(0,99)])
+for _ in range(num_of_it):
+    for i in range(num_of_agents):
+        if random.random() < 0.5:
+            agents[i][0] = (agents[i][0] + 1) % 100
+        else:
+            agents[i][0] = (agents[i][0] - 1) % 100
+        if random.random() < 0.5:
+            agents[i][1] = (agents[i][1] + 1) % 100
+        else:
+            agents[i][1] = (agents[i][1] - 1) % 100
 print(agents)
 
-# Move y1 randomly
-if random.random() < 0.5:
-    agents[1][0] = agents[1][0] + 1
-else:
-    agents[1][0] = agents[1][0] - 1
 
-# Move x1 randomly 
-if random.random() < 0.5:
-    agents[1][1] = agents[1][1] + 1
-else:
-    agents[1][1] = agents[1][1] - 1
-print(agents[1][0], agents[1][1])
+# # Answer = pythaian distance between y0,x0 and y1,x1
+# answer = (((agents[0][0] - agents[1][0])**2) + \
+#     ((agents[0][1] - agents[1][1])**2))**0.5
+# print(answer)
 
-print(agents)
-# Answer = pythaian distance between y0,x0 and y1,x1
-answer = (((agents[0][0] - agents[1][0])**2) + \
-    ((agents[0][1] - agents[1][1])**2))**0.5
-print(answer)
-
-# Which agent is furthest east? (highest x)
-print(max(agents))
-print(max(agents, key=operator.itemgetter(1)))
+# # Which agent is furthest east? (highest x)
+# print(max(agents))
+# print(max(agents, key=operator.itemgetter(1)))
 
 # Plot agent locations 
 matplotlib.pyplot.ylim(0, 99)
 matplotlib.pyplot.xlim(0, 99)
-matplotlib.pyplot.scatter(agents[0][1],agents[0][0])
-matplotlib.pyplot.scatter(agents[1][1],agents[1][0])
-m = max(agents, key=operator.itemgetter(1))
-matplotlib.pyplot.scatter(m[1],m[0], color='red')
+for i in range(num_of_agents):
+    matplotlib.pyplot.scatter(agents[i][1], agents[i][0])
+# m = max(agents, key=operator.itemgetter(1))
+# matplotlib.pyplot.scatter(m[1],m[0], color='red')
 matplotlib.pyplot.show()
