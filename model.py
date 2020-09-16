@@ -36,7 +36,7 @@ print(agents)
 if random.random() < 0.5:
     agents[1][0] = agents[1][0] + 1
 else:
-    yagents[1][0] = agents[1][0] - 1
+    agents[1][0] = agents[1][0] - 1
 
 # Move x1 randomly 
 if random.random() < 0.5:
