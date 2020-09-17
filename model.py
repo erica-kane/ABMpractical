@@ -3,11 +3,19 @@ import operator
 import matplotlib.pyplot
 from itertools import combinations
 import time
+import agentframework
+
+# Make an single agent object
+a = agentframework.Agent()
+print(a)
+print(a.x, a.y)
+a.move()
+print(a.x, a.y)
 
 # Function to find the distance between 2 agents 
-def distance_between(agents_row_a, agents_row_b):
-    diff_y = (agents_row_a[0] - agents_row_b[0])
-    diff_x = (agents_row_a[1] - agents_row_b[1])
+def distance_between(agent_a, agent_b):
+    diff_y = (agent_a.x - agent_b.x)
+    diff_x = (agent_a.y - agent_b.y)
     distance = (diff_y**2 + diff_x**2)**0.5
     return distance
 
@@ -16,29 +24,22 @@ agents = []
 num_of_agents = 10
 num_of_it = 100
 
-# Creating co-ordinates for the amount of agents we set (10)
+# Make the agents 
 for i in range(num_of_agents):
-    agents.append([random.randint(0,100),random.randint(0,100)])
+    agents.append(agentframework.Agent())
 print(agents)
 
-# Randomly moving our 10 agents 100 times 
+# Move the agents 
 for _ in range(num_of_it):
-    for i in range(num_of_agents):
-        if random.random() < 0.5:
-            agents[i][0] = (agents[i][0] + 1) % 100
-        else:
-            agents[i][0] = (agents[i][0] - 1) % 100
-        if random.random() < 0.5:
-            agents[i][1] = (agents[i][1] + 1) % 100
-        else:
-            agents[i][1] = (agents[i][1] - 1) % 100
+    for agent in agents:
+        agent.move()
 print(agents)
 
 # Plot agent locations 
 matplotlib.pyplot.ylim(0, 99)
 matplotlib.pyplot.xlim(0, 99)
-for i in range(num_of_agents):
-    matplotlib.pyplot.scatter(agents[i][1], agents[i][0])
+for agent in agents:
+    matplotlib.pyplot.scatter(agent.x, agent.y)
 # m = max(agents, key=operator.itemgetter(1))
 # matplotlib.pyplot.scatter(m[1],m[0], color='red')
 matplotlib.pyplot.show()
