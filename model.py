@@ -47,11 +47,11 @@ matplotlib.pyplot.show()
 distance_between_2 = distance_between(agents[0], agents[1])
 print(distance_between_2)
 
-start = time.process_time()
-
 # Creating an empty list for the distances to append to
 # We can append distance values to this in the for loop, to later find the max and min
 distance_list = []
+
+start = time.process_time()
 
 # for loop to find the distance between every agent combination
 # This loop uses combinations, a function which returns tuples with no repeated combinations 
@@ -70,7 +70,7 @@ print(distance_list)
 max(distance_list)
 min(distance_list)
 
-# Graph for times 
+# Graph for times when agents increase 
 agent_numbers = [10, 100, 500, 1000, 2000, 3000]
 times = [0.0005, 0.0088, 0.1924, 0.7024, 2.7459, 6.1976]
 matplotlib.pyplot.plot(agent_numbers, times, marker = 'o', color = "r")
