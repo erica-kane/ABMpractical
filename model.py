@@ -3,10 +3,27 @@ import operator
 import matplotlib.pyplot
 from itertools import combinations
 import time
+import csv
 import agentframework
 
+# Read the CSV
+environment = []
+f = open('in.txt', newline = '')
+reader = csv.reader(f, quoting = csv.QUOTE_NONNUMERIC)
+for row in reader:
+    rowlist = []
+    for value in row:
+        rowlist.append(value)
+    environment.append(rowlist)
+
+f.close()
+
+# Getting dimensions of environment 
+y_len = len(environment)
+x_len = len(environment[0])
+
 # Make an single agent object
-a = agentframework.Agent()
+a = agentframework.Agent(environment)
 print(a)
 print(a.x, a.y)
 a.move()
@@ -21,23 +38,35 @@ def distance_between(agent_a, agent_b):
 
 # Creating a list for agents and variables
 agents = []
-num_of_agents = 10
+num_of_agents = 10 # 200
 num_of_it = 100
 
 # Make the agents 
 for i in range(num_of_agents):
-    agents.append(agentframework.Agent())
+    agents.append(agentframework.Agent(environment))
 print(agents)
+
+# Drawning an initial plot to compare 
+matplotlib.pyplot.ylim(0, y_len)
+matplotlib.pyplot.xlim(0, x_len)
+matplotlib.pyplot.imshow(environment)
+for agent in agents:
+    matplotlib.pyplot.scatter(agent.x, agent.y)
+# m = max(agents, key=operator.itemgetter(1))
+# matplotlib.pyplot.scatter(m[1],m[0], color='red')
+matplotlib.pyplot.show()
 
 # Move the agents 
 for _ in range(num_of_it):
     for agent in agents:
         agent.move()
-print(agents)
+        agent.eat()
+        agent.sick()
 
 # Plot agent locations 
-matplotlib.pyplot.ylim(0, 99)
-matplotlib.pyplot.xlim(0, 99)
+matplotlib.pyplot.ylim(0, y_len)
+matplotlib.pyplot.xlim(0, x_len)
+matplotlib.pyplot.imshow(environment)
 for agent in agents:
     matplotlib.pyplot.scatter(agent.x, agent.y)
 # m = max(agents, key=operator.itemgetter(1))
