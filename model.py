@@ -10,6 +10,11 @@ import agentframework
 environment = []
 f = open('in.txt', newline = '')
 reader = csv.reader(f, quoting = csv.QUOTE_NONNUMERIC)
+
+# This code could be written like this:
+# environment = list(reader)
+# But a loop was used for practice 
+
 for row in reader:
     rowlist = []
     for value in row:
@@ -38,7 +43,7 @@ def distance_between(agent_a, agent_b):
 
 # Creating a list for agents and variables
 agents = []
-num_of_agents = 10 # 200
+num_of_agents = 10 
 num_of_it = 100
 
 # Make the agents 
@@ -72,6 +77,21 @@ for agent in agents:
 # m = max(agents, key=operator.itemgetter(1))
 # matplotlib.pyplot.scatter(m[1],m[0], color='red')
 matplotlib.pyplot.show()
+
+# Writing out environment as a csv file 
+envifile = open('envifile.txt', 'w', newline = '')
+writer = csv.writer(envifile)
+writer.writerows(environment)
+envifile.close()
+
+# Write out total amount stored by all agents 
+totalstore = 0
+for agent in agents:
+     totalstore = agent.store + totalstore
+storefile = open('storefile.txt', 'a')
+storefile.write('Total agent store: ' + str(totalstore) + '\n')
+storefile.close()
+
 
 # Distance between any 2 agents (any number between 0 and 9 can be given)
 distance_between_2 = distance_between(agents[0], agents[1])
