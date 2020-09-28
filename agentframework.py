@@ -1,11 +1,11 @@
 import random
 
 class Agent():
-    def __init__(self, environment, agents):
+    def __init__(self, environment, agents, y, x):
         self.y_max = len(environment) - 1
         self.x_max = len(environment[0]) - 1
-        self.y = random.randint(0, self.y_max)
-        self.x = random.randint(0, self.x_max)
+        self.y = y
+        self.x = x
         self.environment = environment
         self.store = 0 
         self.agents = agents
