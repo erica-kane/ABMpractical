@@ -9,6 +9,7 @@ from itertools import combinations
 import time
 import csv
 import agentframework
+import predframework
 import requests
 import bs4
 
@@ -30,12 +31,14 @@ for row in reader:
 f.close()
 
 # # Getting dimensions of environment 
-# y_len = len(environment)
-# x_len = len(environment[0])
+y_len = len(environment)
+x_len = len(environment[0])
 
 # Creating a list for agents and variables
 agents = []
-num_of_agents = 10
+preds = []
+num_of_agents = 20
+num_of_preds = 10
 num_of_it = 100
 neighbourhood = 20
 
@@ -50,14 +53,25 @@ td_xs = soup.find_all(attrs={"class" : "x"})
 
 
 # Make the agents 
+# In this stage the coordinates are multiplied by 3 to spread them across the environment
+# Data resulting in numbers greater than the environment perimeter is dealt with 
 for i in range(num_of_agents):
-    y = int(td_ys[i].text)
-    x = int(td_xs[i].text)
+    y = (int(td_ys[i].text)) * 3
+    x = (int(td_xs[i].text)) * 3
+    if y >= y_len:
+        y = y % y_len 
+    if x >= x_len:
+        x = x % x_len
     agents.append(agentframework.Agent(environment, agents, y, x))
 
-# Prove the agents have access to the list of agents 
+# Make the predators 
+for i in range(num_of_preds):
+    preds.append(predframework.Pred(environment, preds, agents))
+
+# Prove access 
 agents[1].x
 agents[5].agents[1].x
+preds[4].agents[1].x
 
 
 # initialise the graph
@@ -80,7 +94,9 @@ def update(frame_number):
         agent.share(neighbourhood)
 
     for agent in agents:
-        matplotlib.pyplot.scatter(agent.x, agent.y)
+        matplotlib.pyplot.scatter(agent.x, agent.y, c = 'w')
+    for pred in preds:
+        matplotlib.pyplot.scatter(pred.x, pred.y, c = 'k', marker = 'v')
   
 
 # Add a funciton that will run the model 
