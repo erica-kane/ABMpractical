@@ -1,11 +1,11 @@
+# Import the necessary libraries and the classes from the framework 
 import random
 import operator
 import matplotlib
 import matplotlib.pyplot
 import matplotlib.animation 
 import csv
-import sheepframework
-import predframework
+from enhancedframework import Sheep, Pred
 
 
 # Read the CSV
@@ -18,12 +18,12 @@ environment = list(reader)
 f.close()
 
 
-# # Getting dimensions of environment 
+# Getting dimensions of environment 
 y_len = len(environment)
 x_len = len(environment[0])
 
 
-# Creating a list for agents and variables
+# Creating a list for all agents and initialising variables
 herd = []
 preds = []
 num_of_sheep = 20
@@ -31,21 +31,24 @@ num_of_preds = 10
 num_of_it = 100
 
 
-# Make the agents 
+# Make the sheep
 for i in range(num_of_sheep):
-    herd.append(sheepframework.Sheep(environment, herd, preds))
+    herd.append(Sheep(environment, herd, preds))
 
 
 # Make the predators 
 for i in range(num_of_preds):
-    preds.append(predframework.Pred(environment, preds, herd))
+    preds.append(Pred(environment, herd, preds))
 
 
-# initialise the graph
+# Initialise the graph
 fig = matplotlib.pyplot.figure(figsize=(7, 7))
 ax = fig.add_axes([0, 0, 1, 1])
 
-# Move the agents 
+
+# Move the agents
+# Set the size of the point to be equal to the store, to show how the sheep grow as they eat, and the predators grow as they kill (eat) the sheep
+# This also tests that the predators are eating the sheep correctly  
 
 def update(frame_number):
     
@@ -53,15 +56,19 @@ def update(frame_number):
 
     matplotlib.pyplot.imshow(environment)
 
-    #random.shuffle(agents)
+# The sheep's action is specified as it can do either exclusively of the other
     for sheep in herd:
         sheep.move()
         sheep.eat()
 
-    for sheep in herd:
-        matplotlib.pyplot.scatter(sheep.x, sheep.y, c = 'w')
+# The predator is simulated because all its actions are essential and defined within the sub class 
     for pred in preds:
-        matplotlib.pyplot.scatter(pred.x, pred.y, c = 'k', marker = 'v')
+        pred.simulate()
+
+    for sheep in herd:
+        matplotlib.pyplot.scatter(sheep.x, sheep.y, c = 'w', s = sheep.store)
+    for pred in preds:
+        matplotlib.pyplot.scatter(pred.x, pred.y, c = 'k', marker = 'v', s = pred.store + 50)
   
 
 animation = matplotlib.animation.FuncAnimation(fig, update, interval = 1, repeat = False, frames = num_of_it)
