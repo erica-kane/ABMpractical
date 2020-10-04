@@ -1,3 +1,4 @@
+# import all essential libraries, and the class framework
 import random
 import operator
 import tkinter
@@ -9,19 +10,17 @@ from itertools import combinations
 import time
 import csv
 import agentframework
-import predframework
 import requests
 import bs4
 
-# Read the CSV
+
+# Read the CSV, appending individual values to a row (in list format), then rows to a the empty environment list 
+# This will create a list of lists
 environment = []
 f = open('in.txt', newline = '')
 reader = csv.reader(f, quoting = csv.QUOTE_NONNUMERIC)
 
-# This code could be written like this:
-# environment = list(reader)
-# But a loop was used for practice 
-
+# environment = list(reader) could have been used, but a loop was used instead for practice
 for row in reader:
     rowlist = []
     for value in row:
@@ -30,19 +29,19 @@ for row in reader:
 
 f.close()
 
-# # Getting dimensions of environment 
+
+# Getting dimensions of environment to use later when making the agents
+# This ensures agents will not be plotted outside boundaries in a later preprocessing stage 
 y_len = len(environment)
 x_len = len(environment[0])
 
-# Creating a list for agents and variables
+
+# Creating a list for agents to be appended to, and initialising and variables 
 agents = []
-preds = []
 num_of_agents = 20
-num_of_preds = 10
 num_of_it = 100
 neighbourhood = 20
 
-# ax.set_autoscale_on(False)
 
 # scraping x and y data 
 r = requests.get('http://www.geog.leeds.ac.uk/courses/computing/practicals/python/agent-framework/part9/data.html')
@@ -53,62 +52,57 @@ td_xs = soup.find_all(attrs={"class" : "x"})
 
 
 # Make the agents 
-# In this stage the coordinates are multiplied by 3 to spread them across the environment
-# Data resulting in numbers greater than the environment perimeter is dealt with 
+# The environment length is 300, but the scraped data is between 0 and 100
+# Data is multiplied by 3 so agents are spread across the environment in the same pattern 
+# Data resulting in numbers greater than the environment perimeter is dealt with, using the dimensions calculated previously  
 for i in range(num_of_agents):
     y = (int(td_ys[i].text)) * 3
     x = (int(td_xs[i].text)) * 3
+
     if y >= y_len:
         y = y % y_len 
     if x >= x_len:
         x = x % x_len
     agents.append(agentframework.Agent(environment, agents, y, x))
 
-# Make the predators 
-for i in range(num_of_preds):
-    preds.append(predframework.Pred(environment, preds, agents))
 
-# Prove access 
+# Testing that the agents have access to other agents  
 agents[1].x
 agents[5].agents[1].x
-preds[4].agents[1].x
 
 
 # initialise the graph
 fig = matplotlib.pyplot.figure(figsize=(7, 7))
 ax = fig.add_axes([0, 0, 1, 1])
 
-# Move the agents 
 
+# Move the agents 
+# .shuffle is used to randomize the order of agent actions
+# This causes the plot colours to change in the animation as they are coloured on order
 def update(frame_number):
     
     fig.clear()  
 
     matplotlib.pyplot.imshow(environment)
 
-    #for _ in range(num_of_it):
-    #random.shuffle(agents)
+    random.shuffle(agents)
     for agent in agents:
         agent.move()
         agent.eat()
         agent.share(neighbourhood)
 
     for agent in agents:
-        matplotlib.pyplot.scatter(agent.x, agent.y, c = 'w')
-    for pred in preds:
-        matplotlib.pyplot.scatter(pred.x, pred.y, c = 'k', marker = 'v')
+        matplotlib.pyplot.scatter(agent.x, agent.y)
   
 
-# Add a funciton that will run the model 
+# Add a function that will run the model 
 # .draw was used instead of .show as .show is deprecated 
 def run():
     animation = matplotlib.animation.FuncAnimation(fig, update, frames=num_of_it, repeat=False)
     canvas.draw()
 
-# animation = matplotlib.animation.FuncAnimation(fig, update, interval = 1, repeat = False, frames = num_of_it)
-# matplotlib.pyplot.show()
 
-# Building the main window 
+# Building the main window for the GUI
 root = tkinter.Tk()
 root.wm_title("Model")
 canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=root)
@@ -123,13 +117,7 @@ model_menu.add_command(label="Run model", command=run)
 tkinter.mainloop()
 
 
-# Writing out environment as a csv file 
-envifile = open('envifile.txt', 'w', newline = '')
-writer = csv.writer(envifile)
-writer.writerows(environment)
-envifile.close()
-
-# Write out total amount stored by all agents 
+# Write out total amount stored by all agents into a file
 totalstore = 0
 for agent in agents:
      totalstore = agent.store + totalstore
@@ -138,8 +126,8 @@ storefile.write('Total agent store: ' + str(totalstore) + '\n')
 storefile.close()
 
 
-
-
+# THE CODE BELOW IS FROM INITIAL PRACTICALS, AND IS NOT NECCESSARY FOR THE FINAL MODEL TO RUN
+# IT IS STILL USEFUL TO SHOW EXAMPLES OF TIMING, PLOTTING, AND CALCULATING DISTANCES WITH NO OVERLAPS 
 
 # # Distance between any 2 given agents
 # agents[0].distance_between(agents[6])
