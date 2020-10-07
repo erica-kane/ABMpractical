@@ -2,6 +2,8 @@
 
 ## Introduction
 
+This repo contains the appropriate files to run 2 models, a base model and an enhancement.
+
 ## Contents
 
 This project contains two models and associated frameworks.
@@ -37,6 +39,13 @@ Both models require an [environment file](in.txt).
 ```
 python model.py
 ```
+
+When running this model, you should see a GUI window pop up, with a drop down menu allowing you to run the model.
+This drop down may require you to go to another window then come back to it before it works.
+
+After selecting 'Run Model' on the drop down menu, you should expect to see 10 agents plotted on a 300x300 'environment'.
+The agents will be initialised randomly, causing them to change colour each turn. They will also move randomly, and when they reach the perimeters of the plot they will wrap round the other side. 
+You should see changes in the environment around the path of the agents, as they take from and give back to the environment after each movement. At the end of the running proccess (which will run for 100 iterations) a file will be written called storefile, containing the sum of all the agents' stores (the amount they have taken from the environment by the last iteration). 
 
 ### Enhanced model
 
