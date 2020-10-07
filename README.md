@@ -34,7 +34,15 @@ Both models require an [environment file](in.txt).
 
 ### Base model
 
+```
+python model.py
+```
+
 ### Enhanced model
+
+```
+python enhancedmodel.py
+```
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
