@@ -61,3 +61,4 @@ To simulate a more realistic representation of reality, the agents in this model
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
+
